@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#0f0c1f;">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tap to collect your cash</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="Tap to collect your cash" property="og:title">
+    <meta content="https://assets-global.website-files.com/60fda953d77b9d220f5b3f5e/6467801c9709bba0693d20c5_Code_App%20Preview_Product_93%25.jpg" property="og:image">
+    <meta content="Tap to collect your cash" property="twitter:title">
+    <meta content="https://assets-global.website-files.com/60fda953d77b9d220f5b3f5e/6467801c9709bba0693d20c5_Code_App%20Preview_Product_93%25.jpg" property="twitter:image">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WBE7NGRPN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2WBE7NGRPN');
+    </script>
+
+  </head>
+  <body class="">
+    <div id="app"></div>
+
+    <script>
+      // Work-around node polyfills missing in Vite.
+      window.global = window;
+    </script>
+
+    <script type="module">
+      // Polyfill for Buffer, required by some dependencies
+      import { Buffer } from "buffer";
+      window.Buffer = Buffer;
+    </script>
+
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
