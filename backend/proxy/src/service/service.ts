@@ -6,7 +6,7 @@ import {
   MethodInfoUnary,
   PartialMessage,
 } from "@bufbuild/protobuf";
-import * as proto from '../api';
+import * as proto from '@code-wallet/rpc';
 
 export type ServiceName = keyof typeof proto.Services;
 export type MethodNames<S> = S extends keyof typeof proto.Services ? keyof typeof proto.Services[S]['methods'] : never;
