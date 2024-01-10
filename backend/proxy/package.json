@@ -1,6 +1,6 @@
 {
-  "name": "code-grpc-proxy",
-  "version": "1.0.0",
+  "name": "@code-wallet/proxy",
+  "version": "1.1.0",
   "description": "",
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "@bufbuild/connect-express": "^0.8.6",
     "@bufbuild/connect-node": "^0.8.6",
     "@bufbuild/protobuf": "^1.2.0",
+    "@code-wallet/rpc": "^1.1.0",
     "@grpc/grpc-js": "^1.8.14",
     "@newrelic/native-metrics": "^9.0.0",
     "bcrypt": "^5.1.0",

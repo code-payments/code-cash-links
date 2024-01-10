@@ -1,7 +1,7 @@
 import WebSocket from "ws";
 import { AsyncQueue } from "../utils/queue";
 import { GrpcHandler } from "./handlerGRPC";
-import * as proto from '../api';
+import * as proto from '@code-wallet/rpc';
 import { MethodName, ServiceName } from "./service";
 
 class WebSocketHandler {

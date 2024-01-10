@@ -14,7 +14,7 @@ import {
   ClientStreamingMethod,
   BiDiStreamingMethod,
 } from "./service";
-import * as proto from '../api';
+import * as proto from '@code-wallet/rpc';
 
 const getDecoder = <T extends MethodInfo>(method: T) => {
   return (data: Buffer): InstanceType<T['I']> => {
