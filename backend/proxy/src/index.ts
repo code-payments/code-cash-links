@@ -8,17 +8,26 @@ import { logging } from './middleware';
 import { download, wellKnown, cashlinks } from './routes';
 import { GrpcHandler, WebSocketHandler } from "./service";
 import { log } from "./utils/logger";
+import { handleRequest } from "./service/handlerHTTP";
+import { unexpress } from "./middleware/unexpress";
 
-const app = express();
 const port = process.env.PORT || 3000;
 const baseUrl = process.env.BASE_URL || 'https://api.codeinfra.net:443';
 const newRelicEnabled = process.env.NEW_RELIC_ENABLED === 'true';
 const mode = process.env.NODE_ENV || 'development';
 
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+let id = 0; // ID generator
+const newId = () => id++;
+
 // Middleware
 app.use(cors());
 app.use(express.raw({type: '*/*', limit: '1mb'}));
 app.use(logging);
+app.use(unexpress);
 
 // Routes
 app.use('/', cashlinks);
@@ -29,24 +38,28 @@ app.use('/.well-known', wellKnown);
 app.get('/', (req, res, next) => { res.json({status: 200}) })
 
 // Start service (bidi WS envelopes to GRPC protobufs over HTTP/1)
-
-let id = 0; // WebSocket id generator (why is this not a built-in WebSocket feature?)
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
 wss.on("connection", (ws: any, req: any) => {
-  ws.id = id++; // Assign id to the WebSocket
-  log.ws_opened({ id: ws.id, ip: req.socket.remoteAddress });
+  const id = newId(); // Assign id to the WebSocket (for logging)
+  log.ws_opened({ id, ip: req.socket.remoteAddress });
 
   // There's a lot of complexity burried in these two seemingly small modules,
   // be careful when refactoring (async iterators, async generators, async queues, etc.)
 
-  const service = new GrpcHandler(ws.id, { baseUrl }); 
+  const service = new GrpcHandler(id, { baseUrl }); 
   const handler = new WebSocketHandler(ws as WebSocket, service);
   handler.listen();
 
   ws.on("close", () => {
-    log.ws_closed({ id: ws.id, handler: `${handler.serviceName}.${handler.methodName}` }); 
+    log.ws_closed({ id, handler: `${handler.serviceName}.${handler.methodName}` }); 
   });
+});
+
+app.post('/v1/api', async (req, res, next) => {
+  const id = newId(); // Assign id to the request (for logging)
+
+  // Reusing the GrpcHandler approach from the WebSocket handler
+  const service = new GrpcHandler(id, { baseUrl }); 
+  await handleRequest(service, req, res);
 });
 
 server.listen(port, () => {
