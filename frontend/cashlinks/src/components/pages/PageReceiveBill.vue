@@ -30,6 +30,11 @@ const props = defineProps({
     },
 });
 
+// New simplified logic for mobile devices
+if (UserAgent.isMobileDevice()) {
+    router.push({ name: "download" });
+}
+
 watch(() => props.entropy, () => { router.go(0); });
 
 const balance = ref(0);
@@ -281,7 +286,6 @@ window.addEventListener("resize", () => { qrShow.value = false; });
 
 //@ts-ignore
 window.scanned = isScanned;
-
 </script>
 
 <template>
